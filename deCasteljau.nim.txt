@@ -1,0 +1,22 @@
+import math
+proc deCasteljau(P: seq[(float, float)], n: int, u: float): (float, float) =
+  var Q: seq[(float, float)] = P
+
+  for i in 0..n:
+    Q[i] = P[i]
+
+  for k in 1..n:
+    for i in 0..n - k:
+      let x1 = (1.0 - u) * Q[i][0] + u * Q[i + 1][0]
+      let y1 = (1.0 - u) * Q[i][1] + u * Q[i + 1][1]
+      Q[i] = (x1, y1)
+
+  result = Q[0]
+
+# Ejemplo de uso
+when isMainModule:
+  let P: seq[(float, float)] = @[(0.0, 0.0), (1.0, 3.0), (2.0, 1.0), (3.0, 4.0)]  # Puntos de control
+  let n = P.len - 1  # Grado de la curva de Bezier (número de puntos de control menos 1)
+  let u = 0.2  # Valor del parámetro
+  let C = deCasteljau(P, n, u)
+  echo "El punto en la curva de Bezier es: ", C
